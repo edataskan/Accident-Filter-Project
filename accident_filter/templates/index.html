@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accident Filter</title>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ url_for('static', filename='background_image.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #495057;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 {
+            margin-top: 20px;
+            font-weight: normal;
+            color: #007bff;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        form {
+            width: 90%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Arka planı biraz şeffaf yapar */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group label {
+            margin-right: 15px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            color: #495057;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-group label:hover {
+            color: #007bff;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #results li {
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Accident Filter</h1>
+        <form id="filterForm">
+            <h3>Road Type</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="road_type" value="1"> Roundabout</label>
+                <label><input type="checkbox" name="road_type" value="2"> One Way Street</label>
+                <label><input type="checkbox" name="road_type" value="3"> Dual Carriageway</label>
+                <label><input type="checkbox" name="road_type" value="6"> Single Carriageway</label>
+                <label><input type="checkbox" name="road_type" value="7"> Slip Road</label>
+                <label><input type="checkbox" name="road_type" value="9"> Unknown</label>
+                <label><input type="checkbox" name="road_type" value="12"> One Way Street/Slip Road</label>
+                <label><input type="checkbox" name="road_type" value="-1"> Missing Data</label>
+            </div>
+
+            <h3>Weather Conditions</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="weather_conditions" value="1"> Fine no high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="2"> Raining no high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="3"> Snowing no high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="4"> Fine and high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="5"> Raining and high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="6"> Snowing and high winds</label>
+                <label><input type="checkbox" name="weather_conditions" value="7"> Fog or mist</label>
+            </div>
+
+            <h3>Accident Severity</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="accident_severity" value="1"> Fatal</label>
+                <label><input type="checkbox" name="accident_severity" value="2"> Serious</label>
+                <label><input type="checkbox" name="accident_severity" value="3"> Slight</label>
+            </div>
+
+            <h3>Light Conditions</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="light_conditions" value="1"> Daylight</label>
+                <label><input type="checkbox" name="light_conditions" value="4"> Darkness-Lights lit</label>
+                <label><input type="checkbox" name="light_conditions" value="5"> Darkness-Lights unlit</label>
+                <label><input type="checkbox" name="light_conditions" value="6"> Darkness-No lighting</label>
+            </div>
+
+            <h3>Urban or Rural Area</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="urban_or_rural_area" value="1"> Urban</label>
+                <label><input type="checkbox" name="urban_or_rural_area" value="2"> Rural</label>
+            </div>
+
+            <h3>Casualty Severity</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="casualty_severity" value="1"> Fatal</label>
+                <label><input type="checkbox" name="casualty_severity" value="2"> Serious</label>
+                <label><input type="checkbox" name="casualty_severity" value="3"> Slight</label>
+            </div>
+
+            <h3>Vehicle Type</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="vehicle_type" value="9"> Car</label>
+                <label><input type="checkbox" name="vehicle_type" value="19"> Van</label>
+                <label><input type="checkbox" name="vehicle_type" value="21"> Goods over 3.5t and under 7.5t</label>
+            </div>
+
+            <h3>Sex of Driver</h3>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="sex_of_driver" value="1"> Male</label>
+                <label><input type="checkbox" name="sex_of_driver" value="2"> Female</label>
+            </div>
+
+            <input type="submit" value="Filter">
+        </form>
+
+        <h2>Results:</h2>
+        <ul id="results"></ul>
+    </div>
+</body>
+</html>
